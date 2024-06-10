@@ -19,7 +19,7 @@ states.list$region <- state.abb[match(states.list$region,
 states.map.data <- states.list %>%
   left_join(prescriptions.new, by = c("region" = "State"))
 
-# plotting heatmap !
+# plotting heatmap !!!!
 
 ggplot(states.map.data) + 
   geom_polygon(aes(x = long, y = lat, group = group, fill = num.claims), color = "black") + 
