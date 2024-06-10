@@ -1,5 +1,9 @@
-# hi 
+library(tidyverse)
+prescriptions <- read_csv("https://raw.githubusercontent.com/36-SURE/36-SURE.github.io/main/data/prescriptions.csv")
 
-x = hi 
-y = 1
-x + y
+prescriptions.new <- prescriptions |> 
+  select(State, OpioidFlag) |> 
+  group_by(State, OpioidFlag) |> 
+  summarize(op = n())
+
+  
