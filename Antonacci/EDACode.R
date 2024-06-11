@@ -1,7 +1,6 @@
 #Code for EDA project
-install.packages("ggplot2")
+#install.packages("ggplot2")
 library(ggplot2)
-
 library(tidyverse)
 library(readr)
 prescriptions <- read_csv("https://raw.githubusercontent.com/36-SURE/36-SURE.github.io/main/data/prescriptions.csv")
@@ -13,7 +12,7 @@ west <- c('AK', 'AZ', 'CA', 'CO', 'HI', 'ID', 'MT', 'NV', 'NM', 'OR', 'UT', 'WA'
 midwest <- c('IL', 'IN', 'IA', 'KS', 'MI', 'MN', 'MO', 'NE', 'ND', 'OH', 'SD', 'WI')
 southwest <- c('AZ', 'NM', 'OK', 'TX')
 southeast <- c('AL', 'AR', 'FL', 'GA', 'KY', 'LA', 'MS', 'NC', 'SC', 'TN', 'VA', 'WV')
-northeast <- c('CT', 'ME', 'MA', 'NH', 'NJ', 'NY', 'PA', 'RI', 'VT')
+northeast <- c('CT', 'ME', 'MA', 'NH', 'NJ', 'NY', 'PA', 'RI', 'VT', 'MD', 'DC', 'DE')
 
 prescriptions$Region <- ifelse(prescriptions$State %in% west, 'West',
                                ifelse(prescriptions$State %in% midwest, 'Midwest',
