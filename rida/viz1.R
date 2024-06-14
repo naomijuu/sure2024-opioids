@@ -30,7 +30,7 @@ ggplot(states.map.data) +
   theme_void() +
   coord_map("polyconic") + 
   labs(
-    title = "Opioid Prescriptions by State",
+    title = "Opioid Prescriptions Claims by State",
     fill = "Number of Opioid Claims"
   ) + 
   theme(legend.position = "bottom",
