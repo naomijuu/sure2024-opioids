@@ -65,7 +65,8 @@ prescriptions.std |>
              color = state_clusters)) +
   geom_point(size = 4) + 
   ggthemes::scale_color_colorblind() +
-  labs(x = "Brand-Name Prescription Claims", y = "Generic Prescription Claims ", 
+  labs(x = "Number of Brand-Name Prescription Claims", 
+       y = "Number of Generic Prescription Claims ", 
        color = "State Clusters") +
   theme(panel.background = element_blank(),
         legend.position = "right", 
