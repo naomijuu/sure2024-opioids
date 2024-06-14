@@ -11,23 +11,22 @@ prescriptions <- read_csv("https://raw.githubusercontent.com/36-SURE/36-SURE.git
 
 # manipulating data
 
-prescriptions.clean <- aggregate(NumberClaims ~ State + Type, prescriptions, sum)
+prescriptions.clean <- aggregate(NumberClaims ~ State + OpioidFlag, prescriptions, sum)
 prescriptions.clust <- prescriptions.clean |> 
-  pivot_wider(names_from = Type, values_from = NumberClaims) %>%
-  rename(Brand = Brand, Generic = Generic)
+  pivot_wider(names_from = OpioidFlag, values_from = NumberClaims)
 
 # standardizing
 
 prescriptions.std <- prescriptions.clust |> 
   mutate(
-    std_brand = as.numeric(scale(Brand)),
-    std_generic = as.numeric(scale(Generic))
+    std_opioid = as.numeric(scale(Opioid)),
+    std_notopioid = as.numeric(scale(NotOpioid))
   )
 
 # computing the distance matrix
 
 state_dist <- prescriptions.std |> 
-  select(std_brand, std_generic) |> 
+  select(std_opioid, std_notopioid) |> 
   dist()
 state_dist_matrix <- state_dist |> 
   as.matrix()
@@ -41,11 +40,11 @@ long_dist_matrix <- state_dist_matrix |>
 # k-means++
 
 init_kmpp <- prescriptions.std |> 
-  select(std_brand, std_generic) |> 
+  select(std_opioid, std_notopioid) |> 
   kcca(k = 4, control = list(initcent = "kmeanspp"))
 prescriptions.std |> 
   mutate(state_cluster = factor(init_kmpp@cluster)) |> 
-  ggplot(aes(x = std_brand, y = std_generic, 
+  ggplot(aes(x = std_opioid, y = std_notopioid, 
              color = state_cluster)) + 
   geom_point() +
   coord_fixed()
@@ -54,19 +53,19 @@ prescriptions.std |>
 
 library(flexclust)
 init_kmeanspp <- prescriptions.std |> 
-  select(std_brand, std_generic) |> 
+  select(std_opioid, std_notopioid) |> 
   kcca(k = 4, control = list(initcent = "kmeanspp"))
 
 prescriptions.std |>
   mutate(
     state_clusters = as.factor(init_kmeanspp@cluster)
   ) |>
-  ggplot(aes(x = Brand, y = Generic,
+  ggplot(aes(x = Opioid, y = NotOpioid,
              color = state_clusters)) +
   geom_point(size = 4) + 
   ggthemes::scale_color_colorblind() +
-  labs(x = "Number of Brand-Name Prescription Claims", 
-       y = "Number of Generic Prescription Claims ", 
+  labs(x = "Number of Opioid Prescription Claims", 
+       y = "Number of Non-Opioid Prescription Claims ", 
        color = "State Clusters") +
   theme(panel.background = element_blank(),
         legend.position = "right", 
@@ -77,7 +76,7 @@ prescriptions.std |>
 prescriptions_kmpp <- function(k) {
   
   kmeans_results <- prescriptions.std |>
-    select(std_brand, std_generic) |>
+    select(std_opioid, std_notopioid) |>
     kcca(k = k, control = list(initcent = "kmeanspp"))
   
   kmeans_out <- tibble(
