@@ -31,7 +31,8 @@ ggplot(states.map.data) +
   coord_map("polyconic") + 
   labs(
     title = "Opioid Prescriptions Claims by State",
-    fill = "Number of Opioid Claims"
+    fill = "Number of Opioid Prescription Claims"
   ) + 
   theme(legend.position = "bottom",
-        text = element_text(family = "Times New Roman"))
+        text = element_text(family = "Times New Roman"),
+        plot.title = element_text(hjust = 0.1))
